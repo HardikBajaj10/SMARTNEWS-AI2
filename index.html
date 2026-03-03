@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNews | Premium AI News Feed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-900 flex items-center justify-center min-h-screen p-4">
+    <div class="glass-card p-10 w-full max-w-md fade-in text-center">
+        <div class="mb-8">
+            <h1 class="text-4xl font-extrabold text-blue-400 tracking-tight mb-2">SmartNews</h1>
+            <p class="text-gray-400">Experience information, reimagined.</p>
+        </div>
+
+        <form class="space-y-6 text-left" id="loginForm">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Email Identity</label>
+                <input id="email" type="email" placeholder="name@company.com"
+                    class="w-full p-4 bg-gray-800 bg-opacity-50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Security Key</label>
+                <input id="password" type="password" placeholder="••••••••"
+                    class="w-full p-4 bg-gray-800 bg-opacity-50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+            </div>
+
+            <button type="button" onclick="login()" class="btn-primary w-full py-4 text-lg">
+                Authenticate
+            </button>
+        </form>
+
+        <div class="mt-8 border-t border-gray-800 pt-6">
+            <p class="text-sm text-gray-400">
+                New to the platform?
+                <a href="register.html" class="text-blue-400 font-semibold hover:underline ml-1">Create an account</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- No auto-redirect here as requested, allowing user to see the login screen first -->
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNews | Your Feed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .headline-gradient {
+            background: linear-gradient(to right, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen flex">
+
+    <!-- Sidebar -->
+    <div class="w-72 sidebar flex flex-col p-6 space-y-8 hidden md:flex">
+        <div class="mb-4">
+            <h2 class="text-2xl font-black text-blue-400 tracking-tighter">SmartNews</h2>
+            <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mt-1">Smart Feed v1.0</p>
+        </div>
+
+        <nav class="flex-grow space-y-2">
+            <a href="dashboard.html" class="nav-link active">
+                <span class="mr-3 text-xl">🔥</span> Home Feed
+            </a>
+            <a href="#" class="nav-link">
+                <span class="mr-3 text-xl">🔖</span> My Bookmarks
+            </a>
+            <a href="#" class="nav-link">
+                <span class="mr-3 text-xl">❤️</span> Liked Articles
+            </a>
+            <a href="onboarding.html" class="nav-link">
+                <span class="mr-3 text-xl">⚙️</span> Preferences
+            </a>
+        </nav>
+
+        <div class="border-t border-gray-800 pt-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold"
+                    id="userInitial">U</div>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-bold truncate" id="userNameDisplay">User</p>
+                    <p class="text-xs text-gray-500 truncate" id="userEmailDisplay">reader@smartnews.ai</p>
+                </div>
+            </div>
+            <button onclick="logout()"
+                class="w-full p-2 text-xs font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-widest text-left">
+                Sign Out
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
+        <div class="max-w-6xl mx-auto fade-in">
+            <header class="mb-10 flex justify-between items-end">
+                <div>
+                    <h1 class="text-3xl font-bold mb-1">Welcome back, <span id="userNameHeader"
+                            class="text-blue-400">User</span></h1>
+                    <p class="text-gray-400 text-sm">Curating the best for you today.</p>
+                </div>
+            </header>
+
+            <!-- Breaking Section -->
+            <section class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold headline-gradient underline decoration-blue-500/30 underline-offset-8">
+                        Breaking Now</h2>
+                    <span
+                        class="px-2 py-1 bg-red-500/10 text-red-500 text-[10px] font-black uppercase rounded animate-pulse">Live
+                        Updates</span>
+                </div>
+                <div id="todaySection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards via JS -->
+                </div>
+            </section>
+
+            <!-- Recommendation Section -->
+            <section class="mb-12">
+                <div class="flex items-center space-x-2 mb-6">
+                    <h2 class="text-xl font-bold text-white">Recommended For You</h2>
+                    <span class="text-blue-400">💎</span>
+                </div>
+                <div id="recommendedSection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards via JS -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Auth Guard
+        if (localStorage.getItem("role") !== "user") {
+            window.location.href = "index.html";
+        }
+
+        // Display Metadata
+        const name = localStorage.getItem("userName") || "Reader";
+        const email = localStorage.getItem("loggedUser") || "reader@smartnews.ai";
+        document.getElementById("userNameDisplay").innerText = name;
+        document.getElementById("userNameHeader").innerText = name;
+        document.getElementById("userEmailDisplay").innerText = email;
+        document.getElementById("userInitial").innerText = name.charAt(0);
+
+        function logout() {
+            localStorage.removeItem("loggedUser");
+            localStorage.removeItem("role");
+            localStorage.removeItem("userName");
+            window.location.href = "index.html";
+        }
+    </script>
+    <script src="data/articles.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

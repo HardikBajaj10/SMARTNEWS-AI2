@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNews | Intelligence Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen flex">
+
+    <!-- Sidebar -->
+    <div class="w-72 sidebar flex flex-col p-6 space-y-8 hidden md:flex">
+        <div class="mb-4">
+            <h2 class="text-2xl font-black text-blue-400 tracking-tighter">SmartNews</h2>
+            <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mt-1">Publisher Studio</p>
+        </div>
+
+        <nav class="flex-grow space-y-2">
+            <a href="admin.html" class="nav-link">
+                <span class="mr-3 text-xl">✍️</span> Write Article
+            </a>
+            <a href="analytics.html" class="nav-link active">
+                <span class="mr-3 text-xl">📊</span> Analytics
+            </a>
+            <a href="profile.html" class="nav-link">
+                <span class="mr-3 text-xl">👤</span> Studio Profile
+            </a>
+        </nav>
+
+        <div class="border-t border-gray-800 pt-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold"
+                    id="userInitial">A</div>
+                <div>
+                    <p class="text-sm font-bold truncate" id="userNameDisplay">Admin</p>
+                    <p class="text-xs text-gray-500 truncate" id="userEmailDisplay">admin@smartnews.ai</p>
+                </div>
+            </div>
+            <button onclick="logout()"
+                class="w-full p-2 text-xs font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-widest text-left">
+                Terminate Session
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 lg:p-12 overflow-y-auto">
+        <div class="max-w-6xl mx-auto fade-in">
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold mb-2">Performance Intelligence</h1>
+                <p class="text-gray-400">Deep dive into your publication's reach and engagement.</p>
+            </header>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="glass-card p-6">
+                    <p class="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Total Views</p>
+                    <h3 class="text-3xl font-black text-blue-400" id="totalViews">0</h3>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Avg. Read Time</p>
+                    <h3 class="text-3xl font-black text-green-400" id="avgReadTime">0s</h3>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Engagements</p>
+                    <h3 class="text-3xl font-black text-red-400" id="totalEngagements">0</h3>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Subscribers</p>
+                    <h3 class="text-3xl font-black text-white">128</h3>
+                </div>
+            </div>
+
+            <!-- Detailed Breakdown -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-card p-8">
+                    <h2 class="text-xl font-bold mb-6">Engagement by Category</h2>
+                    <div id="categoryStats" class="space-y-6">
+                        <!-- Stats via JS -->
+                        <p class="text-gray-500 italic">No interaction data collected yet.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8">
+                    <h2 class="text-xl font-bold mb-6">Top Performing Articles</h2>
+                    <div id="topArticles" class="space-y-4">
+                        <!-- Articles via JS -->
+                        <p class="text-gray-500 italic">Publish articles to see performance data.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Auth Guard
+        if (localStorage.getItem("role") !== "admin") {
+            window.location.href = "index.html";
+        }
+
+        // Display Metadata
+        const name = localStorage.getItem("userName") || "Super Admin";
+        const email = localStorage.getItem("loggedUser") || "admin@smartnews.ai";
+        document.getElementById("userNameDisplay").innerText = name;
+        document.getElementById("userEmailDisplay").innerText = email;
+        document.getElementById("userInitial").innerText = name.charAt(0);
+
+        function logout() {
+            localStorage.removeItem("loggedUser");
+            localStorage.removeItem("role");
+            localStorage.removeItem("userName");
+            window.location.href = "index.html";
+        }
+
+        // Simple Analytics Simulation
+        const activity = JSON.parse(localStorage.getItem("userActivity")) || {};
+        const articles = JSON.parse(localStorage.getItem("articles")) || [];
+
+        // Calculate Totals
+        let totalTime = 0;
+        let totalLikes = 0;
+        let totalBookmarks = 0;
+        let catCount = 0;
+
+        const catStatsDiv = document.getElementById("categoryStats");
+        if (Object.keys(activity).length > 0) {
+            catStatsDiv.innerHTML = "";
+            for (let cat in activity) {
+                totalTime += activity[cat].readTime || 0;
+                totalLikes += activity[cat].likes || 0;
+                totalBookmarks += activity[cat].bookmarks || 0;
+                catCount++;
+
+                const readSecs = Math.floor((activity[cat].readTime || 0) / 1000);
+                const progress = Math.min(100, (readSecs / 60) * 100);
+
+                catStatsDiv.innerHTML += `
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">${cat}</span>
+                            <span class="text-xs text-blue-400">${readSecs}s Read Time</span>
+                        </div>
+                        <div class="w-full bg-gray-800 rounded-full h-1.5">
+                            <div class="bg-blue-500 h-1.5 rounded-full" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        document.getElementById("totalEngagements").innerText = totalLikes + totalBookmarks;
+        document.getElementById("avgReadTime").innerText = catCount > 0 ? Math.floor(totalTime / catCount / 1000) + "s" : "0s";
+        document.getElementById("totalViews").innerText = articles.length * 4 + totalLikes; // Mocked views
+
+        // Top Articles
+        const topArticlesDiv = document.getElementById("topArticles");
+        if (articles.length > 0) {
+            topArticlesDiv.innerHTML = articles.slice(0, 5).map(a => `
+                <div class="flex items-center justify-between p-4 bg-gray-800/30 rounded-xl border border-gray-700/50">
+                    <span class="font-bold text-sm truncate w-2/3">${a.title}</span>
+                    <span class="text-[10px] font-black text-green-400 bg-green-400/10 px-2 py-1 rounded uppercase tracking-tighter">Very High Reach</span>
+                </div>
+            `).join("");
+        }
+    </script>
+</body>
+
+</html>

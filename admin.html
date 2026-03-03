@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNews | Publisher Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen flex">
+
+    <!-- Sidebar -->
+    <div class="w-72 sidebar flex flex-col p-6 space-y-8 hidden md:flex">
+        <div class="mb-4">
+            <h2 class="text-2xl font-black text-blue-400 tracking-tighter">SmartNews</h2>
+            <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mt-1">Publisher Studio</p>
+        </div>
+
+        <nav class="flex-grow space-y-2">
+            <a href="admin.html" class="nav-link active">
+                <span class="mr-3 text-xl">✍️</span> Write Article
+            </a>
+            <a href="analytics.html" class="nav-link">
+                <span class="mr-3 text-xl">📊</span> Analytics
+            </a>
+            <a href="profile.html" class="nav-link">
+                <span class="mr-3 text-xl">👤</span> Studio Profile
+            </a>
+        </nav>
+
+        <div class="border-t border-gray-800 pt-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold"
+                    id="userInitial">A</div>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-bold truncate" id="userNameDisplay">Admin</p>
+                    <p class="text-xs text-gray-500 truncate" id="userEmailDisplay">admin@smartnews.ai</p>
+                </div>
+            </div>
+            <button onclick="logout()"
+                class="w-full p-2 text-xs font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-widest text-left">
+                Terminate Session
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 lg:p-12 overflow-y-auto">
+        <div class="max-w-5xl mx-auto fade-in">
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold mb-2">Editor's Desk</h1>
+                <p class="text-gray-400">Compose and broadcast your next masterpiece.</p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Compose Form -->
+                <div class="lg:col-span-2">
+                    <div class="glass-card p-8">
+                        <h2 class="text-xl font-bold mb-6 text-blue-300">New Publication</h2>
+                        <form id="articleForm" class="space-y-6">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">Article Headline</label>
+                                <input id="title" type="text" placeholder="Title of your article"
+                                    class="w-full p-4 bg-gray-800 bg-opacity-40 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all font-semibold text-lg" />
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-2">Category</label>
+                                    <select id="category"
+                                        class="w-full p-4 bg-gray-800 bg-opacity-40 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                                        <option value="Technology">Technology</option>
+                                        <option value="Business">Business</option>
+                                        <option value="Sports">Sports</option>
+                                        <option value="Health">Health</option>
+                                        <option value="Science">Science</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Politics">Politics</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-2">Coverage Location</label>
+                                    <input id="location" type="text" placeholder="Global / Mumbai / NYC"
+                                        class="w-full p-4 bg-gray-800 bg-opacity-40 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">Article Content</label>
+                                <textarea id="content" rows="10" placeholder="Write your content here..."
+                                    class="w-full p-4 bg-gray-800 bg-opacity-40 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all resize-none"></textarea>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="checkbox" id="isToday"
+                                        class="w-5 h-5 accent-blue-500 rounded border-gray-700 bg-gray-800" />
+                                    <span class="text-sm text-gray-300">Feature as Breaking News</span>
+                                </label>
+                                <button type="button" onclick="addArticle()" class="btn-primary px-8">
+                                    Publish Article
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Recent Publications sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="glass-card p-6 h-full">
+                        <h2 class="text-lg font-bold mb-6 flex items-center">
+                            <span class="mr-2">📁</span> Recent Publications
+                        </h2>
+                        <div id="articleList" class="space-y-4">
+                            <!-- List of published articles -->
+                            <p class="text-gray-500 text-sm italic">No articles published yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Auth Guard
+        if (localStorage.getItem("role") !== "admin") {
+            window.location.href = "index.html";
+        }
+
+        // Display Metadata
+        const userName = localStorage.getItem("userName") || "Super Admin";
+        const userEmail = localStorage.getItem("loggedUser") || "admin@gmail.com";
+        document.getElementById("userNameDisplay").innerText = userName;
+        document.getElementById("userEmailDisplay").innerText = userEmail;
+        document.getElementById("userInitial").innerText = userName.charAt(0);
+
+        function logout() {
+            localStorage.removeItem("loggedUser");
+            localStorage.removeItem("role");
+            localStorage.removeItem("userName");
+            window.location.href = "index.html";
+        }
+    </script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

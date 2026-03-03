@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex">
+
+
+<div class="w-64 bg-gray-800 min-h-screen p-6">
+
+<h2 class="text-xl font-bold text-blue-400 mb-8">
+
+SmartNews
+
+</h2>
+
+<a href="dashboard.html" class="block mb-4">
+Dashboard
+</a>
+
+<a href="admin.html" class="block mb-4">
+Manage Articles
+</a>
+
+<a href="analytics.html" class="block mb-4">
+Analytics
+</a>
+
+<a href="profile.html" class="text-blue-400">
+Profile
+</a>
+
+</div>
+
+
+<!-- Main -->
+
+<div class="flex-1 p-10">
+
+<h1 class="text-3xl font-semibold tracking-wide mb-6">
+    USER PROFILE
+</h1>
+<p class="text-gray-400 mb-4">Email: <span id="userEmail"></span></p>
+
+<div class="bg-gray-800 p-8 rounded-lg w-96">
+
+<h2 id="username" class="text-xl mb-4">
+
+Hardik Bajaj
+
+</h2>
+
+<p>
+
+Articles Read :
+
+<span id="reads"></span>
+
+</p>
+
+<p>
+
+Bookmarks :
+
+<span id="bookmarks"></span>
+
+</p>
+
+<p>
+
+Likes :
+
+<span id="likes"></span>
+
+</p>
+
+
+<div id="badge"
+class="mt-6 p-3 rounded text-center font-bold">
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+if(!localStorage.getItem("loggedUser")){
+    window.location.href = "index.html";
+}
+</script>
+<script src="js/profile.js"></script>
+<script>
+function logout(){
+    localStorage.removeItem("loggedUser");
+    localStorage.removeItem("role");
+    window.location.href="index.html";
+}
+</script>
+
+</body>
+
+</html>
