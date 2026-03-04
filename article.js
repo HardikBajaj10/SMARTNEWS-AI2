@@ -1,63 +1,221 @@
-// article.js – Handles detailed article view and engagement tracking
+const articleId = localStorage.getItem("currentArticleId");
+const token = localStorage.getItem('token');
+if (!token) window.location.href = 'index.html';
 
-(function () {
-    const id = parseInt(localStorage.getItem("currentArticleId"));
-    const category = localStorage.getItem("currentCategory");
+let readStartTime = Date.now();
+let currentCat = "Unknown";
+let commentPage = 0;
+let totalComments = 0;
 
-    // Fetch articles from localStorage or mock data
-    let localArticles = JSON.parse(localStorage.getItem("articles")) || [];
-    if (typeof articles !== 'undefined' && localArticles.length === 0) {
-        localArticles = articles;
+const titleEl = document.getElementById("title");
+const contentEl = document.getElementById("content");
+const metaEl = document.getElementById("meta");
+const badgeEl = document.getElementById("categoryBadge");
+
+// ── Load article ─────────────────────────────────────────────────────────────
+async function loadArticle() {
+    await loadGlobalProfile();
+
+    if (!articleId) {
+        titleEl.innerText = "Article Not Found";
+        contentEl.innerHTML = "<p>Please return to the dashboard.</p>";
+        return;
     }
 
-    const article = localArticles.find(a => a.id === id);
+    try {
+        const res = await fetch(`/api/articles/${articleId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed to fetch article');
 
-    if (!article) {
-        document.getElementById("title").innerText = "Publication Not Found";
-        document.getElementById("content").innerHTML = "<p>The requested intelligence report is no longer available in our active index.</p>";
-    } else {
-        document.getElementById("title").innerText = article.title;
-        document.getElementById("meta").innerText = `Broadcast by ${article.author} | Origin: ${article.location}`;
+        const article = await res.json();
+        currentCat = article.category;
 
-        // Convert plain text to paragraphs if needed
-        const contentHtml = article.content
-            ? article.content.split('\n').map(p => `<p>${p}</p>`).join('')
-            : "<p>Analytical data is currently being synthesized. Please check back shortly.</p>";
+        if (badgeEl) badgeEl.innerText = article.category;
+        titleEl.innerText = article.title;
+        metaEl.innerText = `By ${article.author} · ${article.location} · ${article.views} view${article.views !== 1 ? 's' : ''}`;
+        contentEl.innerHTML = `<p>${article.content.replace(/\n/g, '</p><p>')}</p>`;
 
-        document.getElementById("content").innerHTML = contentHtml;
-    }
+        // Load comments after article renders
+        await loadComments();
 
-    // Engagement Tracking
-    let startTime = Date.now();
-
-    window.like = function () {
-        updateActivity(category, 'likes', 1);
-        alert("Engagement recorded: Recommendation profile updated.");
-    };
-
-    window.bookmark = function () {
-        updateActivity(category, 'bookmarks', 1);
-        alert("Reference saved: Content added to your secure archive.");
-    };
-
-    window.finishReading = function () {
-        const duration = Math.floor((Date.now() - startTime) / 1000);
-        updateActivity(category, 'readTime', duration * 1000); // Store in ms
-        window.location.href = "dashboard.html";
-    };
-
-    function updateActivity(cat, type, value) {
-        let activity = JSON.parse(localStorage.getItem("userActivity")) || {};
-        if (!activity[cat]) {
-            activity[cat] = { readTime: 0, likes: 0, bookmarks: 0, rating: 0 };
+        // Check if this article is already bookmarked
+        const bkRes = await fetch(`/api/bookmarks/check/${articleId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (bkRes.ok) {
+            const { bookmarked } = await bkRes.json();
+            const bkBtn = document.querySelector('button[onclick="bookmark()"]');
+            if (bkBtn && bookmarked) {
+                updateButtonState(bkBtn, '🔖 Saved', true);
+            }
         }
 
-        if (type === 'readTime') {
-            activity[cat].readTime += value;
+        // Check if this article is already liked
+        const likeRes = await fetch(`/api/likes/check/${articleId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (likeRes.ok) {
+            const { liked } = await likeRes.json();
+            const likeBtns = document.querySelectorAll('button[onclick="like()"]');
+            likeBtns.forEach(btn => {
+                if (liked) updateButtonState(btn, '❤️ Recommended', true);
+            });
+        }
+
+    } catch (err) {
+        console.error("Failed to load article details", err);
+        titleEl.innerText = "Error loading article";
+        contentEl.innerHTML = "<p>Please try again later.</p>";
+    }
+}
+
+// ── Comments ──────────────────────────────────────────────────────────────────
+async function loadComments(loadMore = false) {
+    if (!loadMore) commentPage = 0;
+
+    try {
+        const res = await fetch(`/api/comments/${articleId}?page=${commentPage}&limit=10`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        totalComments = data.total;
+
+        const countEl = document.getElementById('commentCount');
+        if (countEl) countEl.innerText = `${totalComments} comment${totalComments !== 1 ? 's' : ''}`;
+
+        const list = document.getElementById('commentList');
+        if (!list) return;
+
+        if (commentPage === 0) list.innerHTML = '';
+
+        if (data.comments.length === 0 && commentPage === 0) {
+            list.innerHTML = `<p style="color:#9db2bf; font-size:13px; font-style:italic; padding:12px 0;">Be the first to comment.</p>`;
         } else {
-            activity[cat][type] += value;
+            data.comments.forEach(c => {
+                const el = document.createElement('div');
+                el.style.cssText = 'padding:14px 0; border-bottom:1px solid #f0ecdd;';
+                el.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                        <span style="font-weight:600; font-size:13px; color:#485f88;">${c.user?.name || 'Reader'}</span>
+                        <span style="font-size:11px; color:#c9ccc3;">${new Date(c.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    </div>
+                    <p style="font-size:14px; color:#2c2c2c; line-height:1.6; margin:0;">${c.text}</p>
+                `;
+                list.appendChild(el);
+            });
         }
 
-        localStorage.setItem("userActivity", JSON.stringify(activity));
+        const loadMoreBtn = document.getElementById('loadMoreComments');
+        if (loadMoreBtn) {
+            loadMoreBtn.style.display = data.hasMore ? 'block' : 'none';
+            if (data.hasMore) commentPage++;
+        }
+    } catch (err) {
+        console.error("Failed to load comments", err);
     }
-})();
+}
+
+async function postComment() {
+    const input = document.getElementById('commentInput');
+    if (!input) return;
+    const text = input.value.trim();
+    if (!text) return;
+
+    try {
+        const res = await fetch(`/api/comments/${articleId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ text })
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            alert(err.message || 'Could not post comment');
+            return;
+        }
+        input.value = '';
+        commentPage = 0;
+        await loadComments();
+    } catch (err) {
+        console.error("Failed to post comment", err);
+    }
+}
+
+// ── User actions ──────────────────────────────────────────────────────────────
+async function like() {
+    try {
+        // Sync with user activity (analytics)
+        await fetch('/api/user/activity', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ category: currentCat, type: 'like' })
+        });
+
+        // Persist specific article like
+        const res = await fetch(`/api/likes/${articleId}`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+            const { liked } = await res.json();
+            const likeBtns = document.querySelectorAll('button[onclick="like()"]');
+            likeBtns.forEach(btn => {
+                if (liked) {
+                    updateButtonState(btn, '❤️ Recommended', true);
+                } else {
+                    updateButtonState(btn, '👍 Recommend', false);
+                }
+            });
+        }
+    } catch (err) {
+        console.error("Failed to sync like", err);
+    }
+}
+
+async function bookmark() {
+    try {
+        const res = await fetch(`/api/bookmarks/${articleId}`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+            const bkBtn = document.querySelector('button[onclick="bookmark()"]');
+            if (bkBtn) updateButtonState(bkBtn, '🔖 Saved', true);
+        }
+    } catch (err) {
+        console.error("Failed to bookmark", err);
+    }
+}
+
+function updateButtonState(btn, text, isActive) {
+    btn.innerText = text;
+    if (isActive) {
+        btn.style.color = '#485f88';
+        btn.style.fontWeight = '700';
+        btn.style.borderColor = '#485f88';
+    } else {
+        btn.style.color = '';
+        btn.style.fontWeight = '';
+        btn.style.borderColor = '';
+    }
+}
+
+async function finishReading() {
+    const readTime = Date.now() - readStartTime;
+    try {
+        await fetch('/api/readsessions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ articleId, readTime })
+        });
+    } catch (err) {
+        console.error("Failed to save read session", err);
+    }
+    window.location.href = "dashboard.html";
+}
+
+loadArticle();

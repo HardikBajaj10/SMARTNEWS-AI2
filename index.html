@@ -4,46 +4,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartNews | Premium AI News Feed</title>
+    <title>SmartNews | Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-gray-900 flex items-center justify-center min-h-screen p-4">
-    <div class="glass-card p-10 w-full max-w-md fade-in text-center">
-        <div class="mb-8">
-            <h1 class="text-4xl font-extrabold text-blue-400 tracking-tight mb-2">SmartNews</h1>
-            <p class="text-gray-400">Experience information, reimagined.</p>
+<body style="background:#f9f5ed; min-height:100vh; display:flex;">
+
+    <!-- Left: Branding Panel -->
+    <div class="hidden lg:flex flex-col justify-between p-14"
+        style="width:45%; background:#f0ecdd; border-right:1px solid #d9cbc2;">
+        <div>
+            <span class="section-label">Intelligence Delivered</span>
+            <h1 class="headline mt-4" style="font-size:2.6rem; line-height:1.15; color:#121524;">
+                News that moves<br>at your speed.
+            </h1>
+            <p class="mt-5 text-sm leading-relaxed" style="color:#485f88; max-width:340px;">
+                SmartNews curates a personalised feed from thousands of sources, learns what you care about, and
+                surfaces stories that matter — before you have to search for them.
+            </p>
         </div>
+        <div style="border-top:1px solid #d9cbc2; padding-top:24px;">
+            <p class="text-xs" style="color:#9db2bf; letter-spacing:0.06em; text-transform:uppercase; font-weight:600;">
+                Trusted by curious minds worldwide</p>
+        </div>
+    </div>
 
-        <form class="space-y-6 text-left" id="loginForm">
-            <div>
-                <label class="block text-sm font-medium text-gray-300 mb-2">Email Identity</label>
-                <input id="email" type="email" placeholder="name@company.com"
-                    class="w-full p-4 bg-gray-800 bg-opacity-50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+    <!-- Right: Login Form -->
+    <div class="flex flex-col justify-center items-center flex-1 p-8 fade-in">
+        <div style="width:100%; max-width:380px;">
+            <!-- Logo (mobile only visible) -->
+            <div class="lg:hidden mb-8">
+                <h2 class="headline" style="font-size:1.6rem; color:#121524;">SmartNews</h2>
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-300 mb-2">Security Key</label>
-                <input id="password" type="password" placeholder="••••••••"
-                    class="w-full p-4 bg-gray-800 bg-opacity-50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+            <h2 class="headline mb-1" style="font-size:1.5rem; color:#121524;">Welcome back</h2>
+            <p class="text-sm mb-8" style="color:#9db2bf;">Sign in to your account to continue.</p>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold mb-1.5 uppercase tracking-widest"
+                        style="color:#485f88;">Email</label>
+                    <input id="email" type="email" class="input-field" placeholder="you@example.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1.5 uppercase tracking-widest"
+                        style="color:#485f88;">Password</label>
+                    <input id="password" type="password" class="input-field" placeholder="••••••••">
+                </div>
             </div>
 
-            <button type="button" onclick="login()" class="btn-primary w-full py-4 text-lg">
-                Authenticate
+            <button onclick="login()" class="btn btn-primary w-full mt-6 justify-center"
+                style="padding:11px 20px; font-size:13px;">
+                Sign In
             </button>
-        </form>
 
-        <div class="mt-8 border-t border-gray-800 pt-6">
-            <p class="text-sm text-gray-400">
-                New to the platform?
-                <a href="register.html" class="text-blue-400 font-semibold hover:underline ml-1">Create an account</a>
+            <div class="divider"></div>
+
+            <p class="text-sm text-center" style="color:#9db2bf;">
+                Don't have an account?
+                <a href="register.html" style="color:#485f88; font-weight:600; text-decoration:underline;">Create
+                    one</a>
             </p>
         </div>
     </div>
 
-    <!-- No auto-redirect here as requested, allowing user to see the login screen first -->
-    <script src="js/auth.js"></script>
+    <script src="auth.js"></script>
 </body>
 
 </html>

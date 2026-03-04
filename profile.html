@@ -1,106 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Profile</title>
-<script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNews | Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-900 text-white flex">
 
+<body style="background:#f9f5ed; min-height:100vh; display:flex;">
 
-<div class="w-64 bg-gray-800 min-h-screen p-6">
+    <!-- Sidebar (reader) -->
+    <div class="sidebar w-56 flex-col p-5 hidden md:flex"
+        style="position:sticky; top:0; height:100vh; overflow-y:auto;">
+        <div class="mb-6">
+            <h2 class="headline" style="font-size:1.2rem; color:#121524;">SmartNews</h2>
+        </div>
+        <nav class="flex-grow space-y-0.5" id="sidebarNav">
+            <!-- populated by JS based on role -->
+        </nav>
+        <div style="border-top:1px solid #d9cbc2; padding-top:16px; margin-top:16px;">
+            <button onclick="logout()" class="btn btn-ghost text-xs w-full justify-start px-0"
+                style="color:#9db2bf;">Sign out</button>
+        </div>
+    </div>
 
-<h2 class="text-xl font-bold text-blue-400 mb-8">
+    <!-- Main -->
+    <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
+        <div style="max-width:640px; margin:0 auto;" class="fade-in">
 
-SmartNews
+            <header class="mb-8">
+                <h1 class="headline" style="font-size:1.6rem; color:#121524;">Profile</h1>
+                <div class="divider" style="margin:12px 0 0;"></div>
+            </header>
 
-</h2>
+            <!-- Identity card -->
+            <div
+                style="background:#fff; border:1px solid #d9cbc2; border-radius:4px; padding:28px; margin-bottom:24px; display:flex; align-items:center; gap:20px;">
+                <div style="width:56px; height:56px; border-radius:50%; background:#9daccc; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:700; color:#fff; flex-shrink:0;"
+                    id="avatarInitial">U</div>
+                <div>
+                    <p class="headline" style="font-size:1.1rem; color:#121524;" id="profileName">Loading…</p>
+                    <p style="font-size:13px; color:#9db2bf; margin-top:2px;" id="profileEmail"></p>
+                    <span id="badge" class="badge" style="margin-top:8px; display:inline-block;"></span>
+                </div>
+            </div>
 
-<a href="dashboard.html" class="block mb-4">
-Dashboard
-</a>
+            <!-- Reader Stats -->
+            <div id="readerStats" class="hidden"
+                style="background:#fff; border:1px solid #d9cbc2; border-radius:4px; padding:0 20px; margin-bottom:24px;">
+                <div class="stat-row">
+                    <span style="color:#485f88; font-weight:500; font-size:14px;">Articles read</span>
+                    <span class="headline" style="font-size:1.1rem; color:#121524;" id="reads">—</span>
+                </div>
+                <div class="stat-row">
+                    <span style="color:#485f88; font-weight:500; font-size:14px;">Bookmarks</span>
+                    <span class="headline" style="font-size:1.1rem; color:#121524;" id="bookmarks">—</span>
+                </div>
+                <div class="stat-row">
+                    <span style="color:#485f88; font-weight:500; font-size:14px;">Liked articles</span>
+                    <span class="headline" style="font-size:1.1rem; color:#121524;" id="likes">—</span>
+                </div>
+            </div>
 
-<a href="admin.html" class="block mb-4">
-Manage Articles
-</a>
+            <!-- Publisher Stats -->
+            <div id="publisherStats" class="hidden"
+                style="background:#fff; border:1px solid #d9cbc2; border-radius:4px; padding:0 20px; margin-bottom:24px;">
+                <div class="stat-row">
+                    <span style="color:#485f88; font-weight:500; font-size:14px;">Articles Published</span>
+                    <span class="headline" style="font-size:1.1rem; color:#121524;" id="pubArticles">—</span>
+                </div>
+                <div class="stat-row">
+                    <span style="color:#485f88; font-weight:500; font-size:14px;">Lifetime Reads</span>
+                    <span class="headline" style="font-size:1.1rem; color:#121524;" id="pubReads">—</span>
+                </div>
+                <div class="stat-row">
+                    <span style="color:#485f88; font-weight:500; font-size:14px;">Unique Readers</span>
+                    <span class="headline" style="font-size:1.1rem; color:#121524;" id="pubUnique">—</span>
+                </div>
+            </div>
 
-<a href="analytics.html" class="block mb-4">
-Analytics
-</a>
+            <!-- Preferences (Reader Only) -->
+            <div id="preferencesBox" class="hidden"
+                style="background:#fff; border:1px solid #d9cbc2; border-radius:4px; padding:20px;">
+                <p class="section-label mb-3">Your topics</p>
+                <div id="prefTags" class="flex flex-wrap gap-2">
+                    <p style="color:#9db2bf; font-size:13px; font-style:italic;">No preferences set.</p>
+                </div>
+                <div class="mt-4">
+                    <a href="onboarding.html" class="btn btn-outline text-xs" style="padding:7px 16px;">Update
+                        Topics</a>
+                </div>
+            </div>
+        </div>
+    </main>
 
-<a href="profile.html" class="text-blue-400">
-Profile
-</a>
-
-</div>
-
-
-<!-- Main -->
-
-<div class="flex-1 p-10">
-
-<h1 class="text-3xl font-semibold tracking-wide mb-6">
-    USER PROFILE
-</h1>
-<p class="text-gray-400 mb-4">Email: <span id="userEmail"></span></p>
-
-<div class="bg-gray-800 p-8 rounded-lg w-96">
-
-<h2 id="username" class="text-xl mb-4">
-
-Hardik Bajaj
-
-</h2>
-
-<p>
-
-Articles Read :
-
-<span id="reads"></span>
-
-</p>
-
-<p>
-
-Bookmarks :
-
-<span id="bookmarks"></span>
-
-</p>
-
-<p>
-
-Likes :
-
-<span id="likes"></span>
-
-</p>
-
-
-<div id="badge"
-class="mt-6 p-3 rounded text-center font-bold">
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-if(!localStorage.getItem("loggedUser")){
-    window.location.href = "index.html";
-}
-</script>
-<script src="js/profile.js"></script>
-<script>
-function logout(){
-    localStorage.removeItem("loggedUser");
-    localStorage.removeItem("role");
-    window.location.href="index.html";
-}
-</script>
-
+    <script src="fetchProfile.js"></script>
+    <script src="profile.js"></script>
 </body>
 
 </html>

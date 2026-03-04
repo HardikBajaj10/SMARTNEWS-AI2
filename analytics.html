@@ -4,167 +4,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartNews | Intelligence Analytics</title>
+    <title>SmartNews | Analytics</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-gray-900 text-white min-h-screen flex">
+<body style="background:#f9f5ed; min-height:100vh; display:flex;">
 
     <!-- Sidebar -->
-    <div class="w-72 sidebar flex flex-col p-6 space-y-8 hidden md:flex">
-        <div class="mb-4">
-            <h2 class="text-2xl font-black text-blue-400 tracking-tighter">SmartNews</h2>
-            <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mt-1">Publisher Studio</p>
+    <div class="sidebar w-56 flex-col p-5 hidden md:flex"
+        style="position:sticky; top:0; height:100vh; overflow-y:auto;">
+        <div class="mb-6">
+            <h2 class="headline" style="font-size:1.2rem; color:#121524;">SmartNews</h2>
+            <p class="text-xs mt-0.5"
+                style="color:#9db2bf; letter-spacing:0.08em; text-transform:uppercase; font-weight:600;">Publisher
+                Studio</p>
         </div>
-
-        <nav class="flex-grow space-y-2">
-            <a href="admin.html" class="nav-link">
-                <span class="mr-3 text-xl">✍️</span> Write Article
-            </a>
-            <a href="analytics.html" class="nav-link active">
-                <span class="mr-3 text-xl">📊</span> Analytics
-            </a>
-            <a href="profile.html" class="nav-link">
-                <span class="mr-3 text-xl">👤</span> Studio Profile
-            </a>
+        <nav class="flex-grow space-y-0.5">
+            <a href="admin.html" class="nav-link"><span class="mr-2.5">✍️</span>Write</a>
+            <a href="analytics.html" class="nav-link active"><span class="mr-2.5">📊</span>Analytics</a>
+            <a href="bookmarks.html" class="nav-link"><span class="mr-2.5">🔖</span>Bookmarks</a>
+            <a href="likes.html" class="nav-link"><span class="mr-2.5">❤️</span>Liked</a>
+            <a href="profile.html" class="nav-link"><span class="mr-2.5">👤</span>Profile</a>
         </nav>
-
-        <div class="border-t border-gray-800 pt-6">
-            <div class="flex items-center space-x-3 mb-4">
-                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold"
-                    id="userInitial">A</div>
-                <div>
-                    <p class="text-sm font-bold truncate" id="userNameDisplay">Admin</p>
-                    <p class="text-xs text-gray-500 truncate" id="userEmailDisplay">admin@smartnews.ai</p>
+        <div style="border-top:1px solid #d9cbc2; padding-top:16px; margin-top:16px;">
+            <div class="flex items-center space-x-2 mb-3">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                    style="background:#485f88;" id="userInitial">A</div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold truncate" style="color:#121524;" id="userNameDisplay">Admin</p>
                 </div>
             </div>
-            <button onclick="logout()"
-                class="w-full p-2 text-xs font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-widest text-left">
-                Terminate Session
-            </button>
+            <button onclick="logout()" class="btn btn-ghost text-xs w-full justify-start px-0"
+                style="color:#9db2bf;">Sign out</button>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-8 lg:p-12 overflow-y-auto">
-        <div class="max-w-6xl mx-auto fade-in">
-            <header class="mb-12">
-                <h1 class="text-4xl font-bold mb-2">Performance Intelligence</h1>
-                <p class="text-gray-400">Deep dive into your publication's reach and engagement.</p>
+    <!-- Main -->
+    <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
+        <div style="max-width:900px; margin:0 auto;" class="fade-in">
+
+            <header class="mb-8">
+                <h1 class="headline" style="font-size:1.6rem; color:#121524;">Performance Analytics</h1>
+                <div class="divider" style="margin:12px 0 0;"></div>
             </header>
 
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                <div class="glass-card p-6">
-                    <p class="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Total Views</p>
-                    <h3 class="text-3xl font-black text-blue-400" id="totalViews">0</h3>
+            <!-- Top-level stats -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-px mb-8"
+                style="background:#d9cbc2; border:1px solid #d9cbc2; border-radius:4px; overflow:hidden;">
+                <div style="background:#fff; padding:20px 24px;">
+                    <p class="section-label" style="margin-bottom:8px;">Published</p>
+                    <p class="headline" style="font-size:2rem; color:#121524;" id="statArticles">—</p>
                 </div>
-                <div class="glass-card p-6">
-                    <p class="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Avg. Read Time</p>
-                    <h3 class="text-3xl font-black text-green-400" id="avgReadTime">0s</h3>
+                <div style="background:#fff; padding:20px 24px;">
+                    <p class="section-label" style="margin-bottom:8px;">Total Read Time</p>
+                    <p class="headline" style="font-size:2rem; color:#121524;" id="statReadTime">—</p>
                 </div>
-                <div class="glass-card p-6">
-                    <p class="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Engagements</p>
-                    <h3 class="text-3xl font-black text-red-400" id="totalEngagements">0</h3>
+                <div style="background:#fff; padding:20px 24px;">
+                    <p class="section-label" style="margin-bottom:8px;">Total Reads</p>
+                    <p class="headline" style="font-size:2rem; color:#121524;" id="statSessions">—</p>
                 </div>
-                <div class="glass-card p-6">
-                    <p class="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Subscribers</p>
-                    <h3 class="text-3xl font-black text-white">128</h3>
+                <div style="background:#fff; padding:20px 24px;">
+                    <p class="section-label" style="margin-bottom:8px;">Unique Readers</p>
+                    <p class="headline" style="font-size:2rem; color:#121524;" id="statReaders">—</p>
                 </div>
             </div>
 
-            <!-- Detailed Breakdown -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="glass-card p-8">
-                    <h2 class="text-xl font-bold mb-6">Engagement by Category</h2>
-                    <div id="categoryStats" class="space-y-6">
-                        <!-- Stats via JS -->
-                        <p class="text-gray-500 italic">No interaction data collected yet.</p>
-                    </div>
+            <!-- Per-article breakdown -->
+            <div style="background:#fff; border:1px solid #d9cbc2; border-radius:4px; overflow:hidden;">
+                <div style="padding:20px 24px; border-bottom:1px solid #d9cbc2;">
+                    <p class="headline" style="font-size:1rem; color:#121524;">Article Engagement</p>
+                    <p class="text-xs mt-0.5" style="color:#9db2bf;">How long readers spend with each piece</p>
                 </div>
-
-                <div class="glass-card p-8">
-                    <h2 class="text-xl font-bold mb-6">Top Performing Articles</h2>
-                    <div id="topArticles" class="space-y-4">
-                        <!-- Articles via JS -->
-                        <p class="text-gray-500 italic">Publish articles to see performance data.</p>
-                    </div>
+                <div id="perArticleStats" style="padding:8px 24px 24px;">
+                    <p style="color:#9db2bf; font-size:13px; font-style:italic; padding-top:16px;">
+                        No reading data yet. Publish articles and wait for readers to finish them.
+                    </p>
                 </div>
             </div>
         </div>
     </main>
 
+    <script src="fetchProfile.js"></script>
     <script>
-        // Auth Guard
-        if (localStorage.getItem("role") !== "admin") {
-            window.location.href = "index.html";
-        }
-
-        // Display Metadata
-        const name = localStorage.getItem("userName") || "Super Admin";
-        const email = localStorage.getItem("loggedUser") || "admin@smartnews.ai";
-        document.getElementById("userNameDisplay").innerText = name;
-        document.getElementById("userEmailDisplay").innerText = email;
-        document.getElementById("userInitial").innerText = name.charAt(0);
-
         function logout() {
-            localStorage.removeItem("loggedUser");
-            localStorage.removeItem("role");
-            localStorage.removeItem("userName");
-            window.location.href = "index.html";
+            ['token', 'loggedUser', 'role', 'userName', 'articles'].forEach(k => localStorage.removeItem(k));
+            window.location.href = 'index.html';
         }
 
-        // Simple Analytics Simulation
-        const activity = JSON.parse(localStorage.getItem("userActivity")) || {};
-        const articles = JSON.parse(localStorage.getItem("articles")) || [];
+        function formatTime(ms) {
+            const secs = Math.floor(ms / 1000);
+            if (secs < 60) return secs + 's';
+            const mins = Math.floor(secs / 60);
+            const remSecs = secs % 60;
+            return mins + 'm ' + remSecs + 's';
+        }
 
-        // Calculate Totals
-        let totalTime = 0;
-        let totalLikes = 0;
-        let totalBookmarks = 0;
-        let catCount = 0;
+        async function loadAnalytics() {
+            const profile = await loadGlobalProfile();
+            if (!profile || profile.user.role !== 'admin') window.location.href = 'index.html';
 
-        const catStatsDiv = document.getElementById("categoryStats");
-        if (Object.keys(activity).length > 0) {
-            catStatsDiv.innerHTML = "";
-            for (let cat in activity) {
-                totalTime += activity[cat].readTime || 0;
-                totalLikes += activity[cat].likes || 0;
-                totalBookmarks += activity[cat].bookmarks || 0;
-                catCount++;
+            const token = localStorage.getItem('token');
+            if (!token) return;
 
-                const readSecs = Math.floor((activity[cat].readTime || 0) / 1000);
-                const progress = Math.min(100, (readSecs / 60) * 100);
+            try {
+                const [pubRes, artRes] = await Promise.all([
+                    fetch('/api/readsessions/publisher-stats', { headers: { 'Authorization': `Bearer ${token}` } }),
+                    fetch('/api/articles/all', { headers: { 'Authorization': `Bearer ${token}` } })
+                ]);
 
-                catStatsDiv.innerHTML += `
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">${cat}</span>
-                            <span class="text-xs text-blue-400">${readSecs}s Read Time</span>
-                        </div>
-                        <div class="w-full bg-gray-800 rounded-full h-1.5">
-                            <div class="bg-blue-500 h-1.5 rounded-full" style="width: ${progress}%"></div>
-                        </div>
-                    </div>
-                `;
+                if (artRes.ok) {
+                    const articles = await artRes.json();
+                    document.getElementById('statArticles').innerText = articles.length;
+                }
+
+                if (pubRes.ok) {
+                    const data = await pubRes.json();
+                    const totals = data.totals;
+                    const perArticle = data.perArticle;
+
+                    document.getElementById('statReadTime').innerText = formatTime(totals.totalReadTime || 0);
+                    document.getElementById('statSessions').innerText = totals.totalSessions || 0;
+                    document.getElementById('statReaders').innerText = totals.uniqueReaderCount || 0;
+
+                    const container = document.getElementById('perArticleStats');
+                    if (perArticle.length > 0) {
+                        container.innerHTML = perArticle.map((stat, i) => {
+                            const avgSecs = Math.floor((stat.avgReadTime || 0) / 1000);
+                            const barWidth = Math.min(100, (Math.floor((stat.totalReadTime || 0) / 1000) / 120) * 100);
+                            return `
+                                <div style="padding:18px 0; ${i < perArticle.length - 1 ? 'border-bottom:1px solid #f0ecdd;' : ''}">
+                                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                                        <div style="flex:1; margin-right:16px;">
+                                            <p style="font-family:'Merriweather',Georgia,serif; font-size:0.9rem; font-weight:700; color:#121524; line-height:1.3;">
+                                                ${stat.title}
+                                            </p>
+                                            <span class="badge" style="background:#dde6ed; color:#485f88; margin-top:5px; display:inline-block;">${stat.category}</span>
+                                        </div>
+                                        <div style="text-align:right; flex-shrink:0;">
+                                            <p style="font-size:0.95rem; font-weight:700; color:#485f88;">${formatTime(stat.totalReadTime)}</p>
+                                            <p style="font-size:11px; color:#9db2bf; margin-top:2px;">${stat.readerCount} reader${stat.readerCount !== 1 ? 's' : ''} · avg ${avgSecs}s</p>
+                                        </div>
+                                    </div>
+                                    <div style="height:2px; background:#f0ecdd; border-radius:99px; overflow:hidden;">
+                                        <div style="height:100%; width:${barWidth}%; background:#9daccc; transition:width 0.6s ease;"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to load analytics", err);
             }
         }
 
-        document.getElementById("totalEngagements").innerText = totalLikes + totalBookmarks;
-        document.getElementById("avgReadTime").innerText = catCount > 0 ? Math.floor(totalTime / catCount / 1000) + "s" : "0s";
-        document.getElementById("totalViews").innerText = articles.length * 4 + totalLikes; // Mocked views
-
-        // Top Articles
-        const topArticlesDiv = document.getElementById("topArticles");
-        if (articles.length > 0) {
-            topArticlesDiv.innerHTML = articles.slice(0, 5).map(a => `
-                <div class="flex items-center justify-between p-4 bg-gray-800/30 rounded-xl border border-gray-700/50">
-                    <span class="font-bold text-sm truncate w-2/3">${a.title}</span>
-                    <span class="text-[10px] font-black text-green-400 bg-green-400/10 px-2 py-1 rounded uppercase tracking-tighter">Very High Reach</span>
-                </div>
-            `).join("");
-        }
+        loadAnalytics();
     </script>
 </body>
 

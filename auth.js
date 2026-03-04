@@ -1,44 +1,41 @@
-function login() {
-    const emailInput = document.getElementById("email").value.trim().toLowerCase();
-    const passwordInput = document.getElementById("password").value.trim();
+async function login() {
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value.trim();
 
-    if (!emailInput || !passwordInput) {
-        alert("Enter Identity and Security Key");
+    if (!email || !password) {
+        alert("Please enter both email and password.");
         return;
     }
 
-    // Get registered users
-    const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+    try {
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
 
-    // Check if user exists and password matches
-    const user = users.find(u => u.email === emailInput && u.password === passwordInput);
-
-    if (user) {
-        // Authenticated
-        localStorage.setItem("loggedUser", user.email);
-        localStorage.setItem("userName", user.name);
-        localStorage.setItem("role", user.role);
-
-        // Redirect based on role
-        if (user.role === "admin") {
-            window.location.href = "admin.html";
-        } else {
-            // Check for preferences if first time user
-            if (!localStorage.getItem("userPreferences")) {
-                window.location.href = "onboarding.html";
-            } else {
-                window.location.href = "dashboard.html";
-            }
-        }
-    } else {
-        // Fallback for hardcoded admin if not registered (for backwards compatibility during testing)
-        if (emailInput === "admin@gmail.com" && passwordInput === "admin") {
-            localStorage.setItem("loggedUser", "admin@gmail.com");
-            localStorage.setItem("userName", "Super Admin");
-            localStorage.setItem("role", "admin");
-            window.location.href = "admin.html";
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.message || 'Login failed');
             return;
         }
-        alert("Invalid credentials. Please register or check your identity.");
+
+        // Only store the secure token. All other user state is fetched from the backend on page load.
+        localStorage.setItem('token', data.token);
+
+        // Redirect based on backend response data without caching it locally
+        if (data.role === 'admin') {
+            window.location.href = "admin.html";
+        } else {
+            // Check preferences length directly from the login payload
+            if (data.preferences && data.preferences.length > 0) {
+                window.location.href = "dashboard.html";
+            } else {
+                window.location.href = "onboarding.html";
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        alert("An error occurred during login.");
     }
 }

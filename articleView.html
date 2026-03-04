@@ -4,100 +4,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartNews | Reading Room</title>
+    <title>SmartNews | Article</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        .article-content p {
-            margin-bottom: 1.5rem;
-            color: #cbd5e1;
-            font-size: 1.125rem;
-            line-height: 1.8;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-gray-900 text-white min-h-screen">
+<body style="background:#f9f5ed; min-height:100vh;">
 
-    <!-- Navigation / Header -->
-    <header
-        class="p-6 lg:px-12 flex justify-between items-center border-b border-gray-800 sticky top-0 bg-gray-900/80 backdrop-blur-md z-50">
-        <div class="flex items-center space-x-4">
-            <button onclick="window.location.href='dashboard.html'"
-                class="text-gray-400 hover:text-white transition-colors flex items-center">
-                <span class="mr-2 text-xl">←</span> Back to Feed
-            </button>
-            <div class="h-6 w-px bg-gray-800"></div>
-            <span id="categoryBadge"
-                class="px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-widest">
-                Category
-            </span>
-        </div>
-
-        <div class="flex items-center space-x-2">
-            <button onclick="like()"
-                class="p-3 rounded-xl bg-gray-800 hover:bg-red-500/10 hover:text-red-500 transition-all border border-gray-700"
-                title="Like">
-                ❤️
-            </button>
-            <button onclick="bookmark()"
-                class="p-3 rounded-xl bg-gray-800 hover:bg-blue-500/10 hover:text-blue-500 transition-all border border-gray-700"
-                title="Bookmark">
-                🔖
-            </button>
-            <button onclick="finishReading()" class="btn-primary ml-4">
-                Finish Reading
-            </button>
-        </div>
-    </header>
-
-    <main class="max-w-4xl mx-auto p-6 lg:p-12 fade-in">
-        <div class="mb-12">
-            <div id="meta" class="text-[10px] text-gray-500 font-black uppercase tracking-[0.2em] mb-4">
-                Published by Author | Location
-            </div>
-            <h1 id="title" class="text-4xl lg:text-5xl font-black mb-8 leading-tight">
-                Loading Article Headline...
-            </h1>
-            <div class="flex items-center space-x-4 text-sm text-gray-400 border-y border-gray-800 py-4">
-                <span id="readTimeMock">Estimated 4 min read</span>
-                <span>•</span>
-                <span id="dateMock">Updated Today</span>
+    <!-- Top Nav -->
+    <nav style="background:#f0ecdd; border-bottom:1px solid #d9cbc2; position:sticky; top:0; z-index:50;">
+        <div
+            style="max-width:720px; margin:0 auto; padding:14px 24px; display:flex; justify-content:space-between; align-items:center;">
+            <a href="dashboard.html" class="btn btn-ghost text-sm" style="padding:6px 0; color:#485f88;">← Back to
+                Feed</a>
+            <span class="headline" style="font-size:1rem; color:#121524;">SmartNews</span>
+            <div class="flex gap-2">
+                <button onclick="like()" class="btn btn-outline text-xs" style="padding:6px 14px;">Recommend</button>
+                <button onclick="bookmark()" class="btn btn-ghost text-xs"
+                    style="padding:6px 14px; color:#485f88;">Bookmark</button>
             </div>
         </div>
+    </nav>
 
-        <article id="content" class="article-content">
-            <!-- Content injected here -->
-            <p class="animate-pulse bg-gray-800 h-4 w-full rounded mb-4"></p>
-            <p class="animate-pulse bg-gray-800 h-4 w-3/4 rounded mb-4"></p>
-            <p class="animate-pulse bg-gray-800 h-4 w-5/6 rounded mb-4"></p>
-        </article>
-
-        <footer class="mt-20 pt-12 border-t border-gray-800 text-center">
-            <div class="mb-8">
-                <h3 class="text-xl font-bold mb-2">Did you enjoy this article?</h3>
-                <p class="text-gray-400 text-sm">Your feedback helps us personalize your intelligence feed.</p>
+    <!-- Article Content -->
+    <article style="max-width:680px; margin:0 auto; padding:48px 24px 80px;">
+        <header class="mb-8 fade-in">
+            <div style="margin-bottom:16px;">
+                <span id="categoryBadge" class="badge" style="background:#dde6ed; color:#485f88;"></span>
             </div>
-            <div class="flex justify-center space-x-4">
-                <button onclick="like()"
-                    class="px-6 py-2 rounded-xl bg-gray-800 border border-gray-700 hover:bg-gray-700 transition-all">
-                    Recommend It
-                </button>
-                <button onclick="finishReading()"
-                    class="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 transition-all font-bold">
-                    Close & Discover More
-                </button>
+            <h1 id="title" class="headline"
+                style="font-size:2rem; line-height:1.25; color:#121524; margin-bottom:16px;"></h1>
+            <p id="meta" class="text-sm" style="color:#9db2bf; padding-bottom:20px; border-bottom:1px solid #d9cbc2;">
+            </p>
+        </header>
+
+        <div id="content" class="fade-in"
+            style="font-family:'Merriweather',Georgia,serif; font-size:1rem; line-height:1.85; color:#2c2c2c;"></div>
+
+        <!-- Footer actions -->
+        <!-- Article actions footer -->
+        <footer class="mt-16 slide-up"
+            style="border-top:1px solid #d9cbc2; padding-top:24px; display:flex; justify-content:space-between; align-items:center;">
+            <span class="text-sm" style="color:#9db2bf; font-style:italic;">Enjoyed this article?</span>
+            <div class="flex gap-3">
+                <button onclick="like()" class="btn btn-outline text-xs" style="padding:8px 18px;">👍 Recommend</button>
+                <button onclick="bookmark()" class="btn btn-ghost text-xs"
+                    style="padding:8px 18px; border:1px solid #d9cbc2; color:#485f88;">🔖 Save</button>
+                <button onclick="finishReading()" class="btn btn-primary text-xs" style="padding:8px 18px;">Done Reading
+                    →</button>
             </div>
         </footer>
-    </main>
 
-    <script src="data/articles.js"></script>
-    <script src="js/article.js"></script>
-    <script>
-        // Inline UI updates that depend on the article.js loading first
-        const cat = localStorage.getItem('currentCategory');
-        if (cat) document.getElementById('categoryBadge').innerText = cat;
-    </script>
+        <!-- ── Comments section ── -->
+        <section class="mt-12 fade-in">
+            <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:20px;">
+                <h2 class="headline" style="font-size:1.1rem; color:#121524;">Discussion</h2>
+                <span id="commentCount" style="font-size:12px; color:#9db2bf;"></span>
+            </div>
+
+            <!-- Comment input -->
+            <div style="display:flex; gap:10px; margin-bottom:24px;">
+                <textarea id="commentInput" class="input-field flex-1" rows="2" placeholder="Share your thoughts…"
+                    style="resize:none;"></textarea>
+                <button onclick="postComment()" class="btn btn-primary"
+                    style="align-self:flex-end; padding:10px 20px; white-space:nowrap;">
+                    Post
+                </button>
+            </div>
+
+            <!-- Comment list -->
+            <div id="commentList" style="display:flex; flex-direction:column; gap:0;"></div>
+
+            <button id="loadMoreComments" onclick="loadComments(true)" class="btn btn-ghost text-xs mt-4"
+                style="color:#9db2bf; display:none;">Load more comments</button>
+        </section>
+    </article>
+
+    <script src="fetchProfile.js"></script>
+    <script src="article.js"></script>
 </body>
 
 </html>

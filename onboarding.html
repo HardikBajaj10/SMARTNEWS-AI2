@@ -3,23 +3,38 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SmartNews – Choose Topics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNews | Pick Your Interests</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="flex items-center justify-center min-h-screen bg-gray-900">
-    <div class="glass-card p-8 w-full max-w-2xl fade-in">
-        <h2 class="text-2xl font-semibold text-blue-400 mb-6 text-center">
-            Pick Your Favorite Categories
-        </h2>
-        <div id="categoryGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
-            <!-- cards injected by onboarding.js -->
+<body
+    style="background:#f9f5ed; min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:60px 16px;">
+
+    <div class="fade-in" style="width:100%; max-width:600px;">
+        <!-- Header -->
+        <div class="mb-10 text-center">
+            <span class="section-label">Step 1 of 1</span>
+            <h1 class="headline mt-3" style="font-size:2rem; color:#121524;">What do you follow?</h1>
+            <p class="text-sm mt-2" style="color:#9db2bf; max-width:400px; margin:8px auto 0;">
+                Choose the topics you care about. We'll build your personalised feed and refine it as you read.
+            </p>
         </div>
-        <button id="saveBtn" class="btn-primary w-full">Save & Continue</button>
+
+        <!-- Category Grid -->
+        <div id="categoryGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-10"></div>
+
+        <!-- Save Button -->
+        <div class="text-center">
+            <button id="saveBtn" class="btn btn-primary" style="padding:12px 48px; font-size:14px;">
+                Start Reading →
+            </button>
+        </div>
     </div>
 
-    <script src="js/onboarding.js"></script>
+    <script src="fetchProfile.js"></script>
+    <script src="onboarding.js"></script>
 </body>
 
 </html>

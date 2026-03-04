@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNews | Bookmarks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="background:#f9f5ed; min-height:100vh; display:flex;">
+
+    <!-- Sidebar -->
+    <div class="sidebar w-56 flex flex-col p-5 hidden md:flex"
+        style="position:sticky; top:0; height:100vh; overflow-y:auto;">
+        <div class="mb-6">
+            <h2 class="headline" style="font-size:1.2rem; color:#121524;">SmartNews</h2>
+            <p class="text-xs mt-0.5"
+                style="color:#9db2bf; letter-spacing:0.08em; text-transform:uppercase; font-weight:600;">Saved Articles
+            </p>
+        </div>
+
+        <nav class="flex-grow space-y-0.5">
+            <a href="dashboard.html" class="nav-link"><span class="mr-2.5">🗞</span>Feed</a>
+            <a href="bookmarks.html" class="nav-link active"><span class="mr-2.5">🔖</span>Bookmarks</a>
+            <a href="likes.html" class="nav-link"><span class="mr-2.5">❤️</span>Liked</a>
+            <a href="profile.html" class="nav-link"><span class="mr-2.5">👤</span>Profile</a>
+        </nav>
+
+        <div style="border-top:1px solid #d9cbc2; padding-top:16px; margin-top:16px;">
+            <div class="flex items-center space-x-2 mb-3">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                    style="background:#485f88;" id="userInitial">U</div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold truncate" style="color:#121524;" id="userName">User</p>
+                </div>
+            </div>
+            <button onclick="logout()" class="btn btn-ghost text-xs w-full justify-start px-0"
+                style="color:#9db2bf;">Sign out</button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
+        <!-- Header -->
+        <header class="mb-8 fade-in">
+            <div class="flex items-baseline justify-between mb-1">
+                <h1 class="headline" style="font-size:1.6rem; color:#121524;">Bookmarks</h1>
+            </div>
+            <div class="divider" style="margin: 12px 0 0;"></div>
+        </header>
+
+        <!-- Bookmarks Feed -->
+        <section class="fade-in">
+            <div id="bookmarksSection" class="space-y-4">
+                <p style="color:#9db2bf; font-size:14px; font-style:italic;" id="loadingText">Loading your bookmarks...
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="fetchProfile.js"></script>
+    <script src="bookmarks.js"></script>
+</body>
+
+</html>

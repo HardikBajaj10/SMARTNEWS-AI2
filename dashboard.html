@@ -6,117 +6,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartNews | Your Feed</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        .headline-gradient {
-            background: linear-gradient(to right, #3b82f6, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-gray-900 text-white min-h-screen flex">
+<body style="background:#f9f5ed; min-height:100vh; display:flex;">
 
     <!-- Sidebar -->
-    <div class="w-72 sidebar flex flex-col p-6 space-y-8 hidden md:flex">
-        <div class="mb-4">
-            <h2 class="text-2xl font-black text-blue-400 tracking-tighter">SmartNews</h2>
-            <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mt-1">Smart Feed v1.0</p>
+    <div class="sidebar w-56 flex flex-col p-5 hidden md:flex"
+        style="position:sticky; top:0; height:100vh; overflow-y:auto;">
+        <div class="mb-6">
+            <h2 class="headline" style="font-size:1.2rem; color:#121524;">SmartNews</h2>
+            <p class="text-xs mt-0.5"
+                style="color:#9db2bf; letter-spacing:0.08em; text-transform:uppercase; font-weight:600;">Your Feed</p>
         </div>
 
-        <nav class="flex-grow space-y-2">
-            <a href="dashboard.html" class="nav-link active">
-                <span class="mr-3 text-xl">🔥</span> Home Feed
-            </a>
-            <a href="#" class="nav-link">
-                <span class="mr-3 text-xl">🔖</span> My Bookmarks
-            </a>
-            <a href="#" class="nav-link">
-                <span class="mr-3 text-xl">❤️</span> Liked Articles
-            </a>
-            <a href="onboarding.html" class="nav-link">
-                <span class="mr-3 text-xl">⚙️</span> Preferences
-            </a>
+        <nav class="flex-grow space-y-0.5">
+            <a href="dashboard.html" class="nav-link active"><span class="mr-2.5">🗞</span>Feed</a>
+            <a href="bookmarks.html" class="nav-link"><span class="mr-2.5">🔖</span>Bookmarks</a>
+            <a href="likes.html" class="nav-link"><span class="mr-2.5">❤️</span>Liked</a>
+            <a href="profile.html" class="nav-link"><span class="mr-2.5">👤</span>Profile</a>
         </nav>
 
-        <div class="border-t border-gray-800 pt-6">
-            <div class="flex items-center space-x-3 mb-4">
-                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold"
-                    id="userInitial">U</div>
-                <div class="overflow-hidden">
-                    <p class="text-sm font-bold truncate" id="userNameDisplay">User</p>
-                    <p class="text-xs text-gray-500 truncate" id="userEmailDisplay">reader@smartnews.ai</p>
+        <!-- Categories filter -->
+        <div class="mt-6">
+            <p class="section-label">Your Topics</p>
+            <div id="sidebarCategories" class="space-y-0.5"></div>
+        </div>
+
+        <div style="border-top:1px solid #d9cbc2; padding-top:16px; margin-top:16px;">
+            <div class="flex items-center space-x-2 mb-3">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                    style="background:#485f88;" id="userInitial">U</div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold truncate" style="color:#121524;" id="userName">User</p>
                 </div>
             </div>
-            <button onclick="logout()"
-                class="w-full p-2 text-xs font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-widest text-left">
-                Sign Out
-            </button>
+            <button onclick="logout()" class="btn btn-ghost text-xs w-full justify-start px-0"
+                style="color:#9db2bf;">Sign out</button>
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
-        <div class="max-w-6xl mx-auto fade-in">
-            <header class="mb-10 flex justify-between items-end">
-                <div>
-                    <h1 class="text-3xl font-bold mb-1">Welcome back, <span id="userNameHeader"
-                            class="text-blue-400">User</span></h1>
-                    <p class="text-gray-400 text-sm">Curating the best for you today.</p>
-                </div>
-            </header>
+        <!-- Header -->
+        <header class="mb-8 fade-in">
+            <div class="flex items-baseline justify-between mb-1">
+                <h1 class="headline" style="font-size:1.6rem; color:#121524;" id="feedHeadline">Today's Brief</h1>
+                <span class="text-xs" style="color:#9db2bf;" id="dateLabel"></span>
+            </div>
+            <div class="divider" style="margin: 12px 0 0;"></div>
+        </header>
 
-            <!-- Breaking Section -->
-            <section class="mb-12">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl font-bold headline-gradient underline decoration-blue-500/30 underline-offset-8">
-                        Breaking Now</h2>
-                    <span
-                        class="px-2 py-1 bg-red-500/10 text-red-500 text-[10px] font-black uppercase rounded animate-pulse">Live
-                        Updates</span>
-                </div>
-                <div id="todaySection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Cards via JS -->
-                </div>
-            </section>
+        <!-- Breaking News Strip -->
+        <section id="breakingSection" class="mb-10 fade-in">
+            <p class="section-label">Breaking Now</p>
+            <div id="todaySection" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+        </section>
 
-            <!-- Recommendation Section -->
-            <section class="mb-12">
-                <div class="flex items-center space-x-2 mb-6">
-                    <h2 class="text-xl font-bold text-white">Recommended For You</h2>
-                    <span class="text-blue-400">💎</span>
-                </div>
-                <div id="recommendedSection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Cards via JS -->
-                </div>
-            </section>
-        </div>
+        <!-- Main Feed -->
+        <section class="fade-in">
+            <p class="section-label">For You</p>
+            <div id="recommendedSection"></div>
+        </section>
     </main>
 
-    <script>
-        // Auth Guard
-        if (localStorage.getItem("role") !== "user") {
-            window.location.href = "index.html";
-        }
-
-        // Display Metadata
-        const name = localStorage.getItem("userName") || "Reader";
-        const email = localStorage.getItem("loggedUser") || "reader@smartnews.ai";
-        document.getElementById("userNameDisplay").innerText = name;
-        document.getElementById("userNameHeader").innerText = name;
-        document.getElementById("userEmailDisplay").innerText = email;
-        document.getElementById("userInitial").innerText = name.charAt(0);
-
-        function logout() {
-            localStorage.removeItem("loggedUser");
-            localStorage.removeItem("role");
-            localStorage.removeItem("userName");
-            window.location.href = "index.html";
-        }
-    </script>
-    <script src="data/articles.js"></script>
-    <script src="js/dashboard.js"></script>
+    <script src="fetchProfile.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 
 </html>
